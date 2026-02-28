@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #dfe3e8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background: #ffffff;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #e9eef5;
+  font-size: 16px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  background-color: #28a745;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+#qrcode {
+  margin-top: 25px;
+  padding: 20px;
+  background-color: #e5e7ea;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  /* Animation */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#qrcode img,
+#qrcode canvas {
+  animation: fadeInScale 0.4s ease-in-out;
+}
+/* Dark Mode Styles */
+.dark body {
+  background-color: #1e1e1e;
+}
+
+.dark .container {
+  background-color: #2c2c2c;
+  color: white;
+}
+
+.dark input {
+  background-color: #3a3a3a;
+  color: white;
+  border: 1px solid #555;
+}
+
+.dark #qrcode {
+  background-color: #3a3a3a;
+}
+
+.dark button {
+  background-color: #444;
+}
+
+.dark button:hover {
+  background-color: #666;
+}
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <button id="toggleTheme">🌙 Dark Mode</button>
+    <h1>QR Code Generator</h1>
+    <input type="text" id="text" placeholder="Enter text or URL">
+    <button onclick="generateQRCode()"> Generate QR Code</button>
+    <button onclick="downloadQRCode()">Download QR Code</button>
+    <div id="qrcode">
+      <h1>Here</h1>
+    </div>
+  
+  </div>
+ <!-- cdn = content delivery network  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+  const inputField = document.getElementById("text");
+
+  // Generate QR Function
+  function generateQRCode() {
+    const textt = inputField.value;
+    const qrCodeContainer = document.getElementById("qrcode");
+
+    qrCodeContainer.innerHTML = "";
+
+    if (textt.trim() !== "") {
+      new QRCode(qrCodeContainer, {
+        text: textt,
+        width: 150,
+        height: 150
+      });
+    }
+  }
+
+  // Download QR Function
+  function downloadQRCode() {
+    const qrImage = document.querySelector("#qrcode img");
+
+    if (qrImage) {
+      const link = document.createElement("a");
+      link.href = qrImage.src;
+      link.download = "qrcode.png";
+      link.click();
+    } else {
+      alert("Generate a QR code first!");
+    }
+  }
+
+  // Generate on Enter key press
+  inputField.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      generateQRCode();
+    }
+  });
+
+  const toggleBtn = document.getElementById("toggleTheme");
+
+toggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  if (document.body.classList.contains("dark")) {
+    toggleBtn.textContent = "☀ Light Mode";
+  } else {
+    toggleBtn.textContent = "🌙 Dark Mode";
+  }
+});
+</script>
+</body>
+</html>
